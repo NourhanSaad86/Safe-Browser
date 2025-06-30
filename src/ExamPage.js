@@ -8,7 +8,7 @@ const ExamPage = () => {
   const navigate = useNavigate();
   let timeoutId;
 
-  // ✅ تفعيل وضع الشاشة الكاملة
+  // Activate fullscreen mode
   const enterFullScreen = () => {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
@@ -23,7 +23,7 @@ const ExamPage = () => {
     setShowResumeButton(false);
   };
 
-  // ✅ الخروج من وضع الشاشة الكاملة إذا كان مفعّلًا
+  // Exit fullscreen if active
   const exitFullScreen = () => {
     const isFullScreen =
       document.fullscreenElement ||
@@ -47,14 +47,14 @@ const ExamPage = () => {
     setStarted(false);
   };
 
-  // ✅ بدء الامتحان
+  // Start the exam
   const startExam = () => {
     enterFullScreen();
     setStarted(true);
     setExamEnded(false);
   };
 
-  // ✅ إنهاء الامتحان والعودة إلى الصفحة الرئيسية
+  // Finish exam and go back to home page
   const finishExam = () => {
     exitFullScreen();
     navigate("/");
@@ -63,11 +63,11 @@ const ExamPage = () => {
   useEffect(() => {
     if (!started) return;
 
-    // ✅ معالجة التغيير في وضع الشاشة الكاملة
+    // Handle fullscreen change
     const handleFullScreenChange = () => {
       if (!document.fullscreenElement && !examEnded) {
         setShowResumeButton(true);
-        alert("لقد خرجت من وضع الامتحان! اضغط على الزر للعودة.");
+        alert("You have exited the exam mode! Click the button to resume.");
 
         timeoutId = setTimeout(() => {
           navigate("/disqualified");
@@ -77,11 +77,11 @@ const ExamPage = () => {
       }
     };
 
-    // ✅ معالجة الخروج من التبويب
+    // Handle tab switch / visibility change
     const handleTabChange = () => {
       if (document.hidden && !examEnded) {
         setShowResumeButton(true);
-        alert("تم اكتشاف خروجك من صفحة الامتحان! لديك 60 ثانية للعودة قبل الاستبعاد.");
+        alert("You left the exam tab! You have 60 seconds to return before disqualification.");
 
         timeoutId = setTimeout(() => {
           navigate("/disqualified");
@@ -105,19 +105,21 @@ const ExamPage = () => {
     <div style={{ textAlign: "center", marginTop: "20px" }}>
       {!started ? (
         <button onClick={startExam} style={{ padding: "10px 20px", fontSize: "16px" }}>
-          ابدأ الامتحان
+          Start Exam
         </button>
       ) : (
         <>
-          <h1>امتحانك بدأ الآن!</h1>
-          <p>يُرجى البقاء داخل هذه الصفحة حتى تنتهي من الامتحان.</p>
+          <h1>Your Exam Has Started!</h1>
+          <p>Please stay on this page until you finish the exam.</p>
 
-          {/* ✅ زر إنهاء الامتحان والعودة للصفحة الرئيسية */}
+          {/* Finish Exam Button */}
           <button 
             onClick={finishExam} 
-            style={{ padding: "10px 20px", fontSize: "16px", marginTop: "20px", background: "green", color: "white", border: "none", cursor: "pointer" }}
+            style={{ 
+              padding: "10px 20px", fontSize: "16px", marginTop: "20px", background: "green", color: "white", border: "none", cursor: "pointer" 
+            }}
           >
-            إنهاء الامتحان
+            Finish Exam
           </button>
 
           {showResumeButton && (
@@ -128,18 +130,12 @@ const ExamPage = () => {
                   setShowResumeButton(false);
                   clearTimeout(timeoutId);
                 }} 
-                style={{  padding: "10px 20px", fontSize: "16px", marginTop: "20px", background: "green", color: "white", border: "none", cursor: "pointer"}}
+                style={{ 
+                  padding: "10px 20px", fontSize: "16px", marginTop: "20px", background: "green", color: "white", border: "none", cursor: "pointer"
+                }}
               >
-                العودة إلى الامتحان
+                Return to Exam
               </button>
-              <br />
-              {/* <button 
-                onClick={exitFullScreen} 
-                disabled={examEnded} 
-                style={{ padding: "10px 20px", fontSize: "16px", marginTop: "20px", background: "red", color: "white", border: "none", cursor: examEnded ? "not-allowed" : "pointer" }}
-              >
-                إنهاء الامتحان
-              </button> */}
             </div>
           )}
         </>
