@@ -7,8 +7,6 @@ const ExamPage = () => {
   const [showResumeButton, setShowResumeButton] = useState(false);
   const navigate = useNavigate();
   let timeoutId;
-
-  // Activate fullscreen mode
   const enterFullScreen = () => {
     const elem = document.documentElement;
     if (elem.requestFullscreen) {
